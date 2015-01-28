@@ -1,0 +1,39 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $new_goods} -->
+<div class="pro_box">
+<div class="tit">
+
+<span>
+<a href="../search.php?intro=new"><img  src="../images/content_new.gif"  width="960" height="29"/></a>
+ </span>
+ 
+ 
+
+ 
+</div>
+  <!--{foreach from=$new_goods name=new_goods item=goods}-->
+    
+  <div class="goodsItem"  <!--{if $smarty.foreach.new_goods.index mod 5 eq 0}-->
+            style='padding-left:0;'
+            <!-- {/if} -->  
+           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg"  onmouseover="showtrail('{$goods.goods_img}','{$goods.short_style_name}',270,347)" onmouseout="hidetrail()" /></a><br />
+		   
+		
+            <p><img src="../images/watermark_new.gif"></p>     
+			 <p>{$goods.brief}</p>
+           <p><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
+          
+                售价：{$goods.market_price}<br/>
+           <font class="f1">
+           <!-- {if $goods.promote_price neq ""} -->
+        {$goods.promote_price}
+          <!-- {else}-->
+          现价：{$goods.shop_price}
+          <!--{/if}-->
+           </font>
+        </div>
+  <!--{/foreach}-->
+
+</div>
+<div class="blank"></div>
+<!-- {/if} -->

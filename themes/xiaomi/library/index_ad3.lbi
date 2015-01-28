@@ -1,0 +1,27 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<DIV id=xmFocus class="xmFocus cfl">
+<DIV 
+style="Z-INDEX: 2; BACKGROUND: url(images/pic1.jpg) #ffffff no-repeat center 50%" 
+index="1"><A onClick="_gaq.push(['_trackEvent', '首页广告点击', 'A2']);" 
+href="#" 
+target=_blank></A></DIV>
+<DIV 
+style="Z-INDEX: 1; BACKGROUND: url(images/pic2.jpg) #ffffff no-repeat center 50%" 
+index="2"><A onClick="_gaq.push(['_trackEvent', '首页广告点击', 'A1']);" 
+href="#" target=_blank></A></DIV>
+<DIV 
+style="Z-INDEX: 1; BACKGROUND: url(images/pic3.jpg) #ffffff no-repeat center 50%" 
+index="3"><A onClick="_gaq.push(['_trackEvent', '首页广告点击', 'A3']);" 
+href="#" target=_blank></A></DIV>
+<DIV 
+style="Z-INDEX: 1; BACKGROUND: url(images/pic4.jpg) #ffffff no-repeat center 50%" 
+index="4"><A onClick="_gaq.push(['_trackEvent', '首页广告点击', 'A4']);" 
+href="#" target=_blank></A></DIV>
+<UL></UL></DIV>
+
+
+<SCRIPT type=text/javascript>$(function(){Xmeb.App.xmFocus.init($("#xmFocus"),{mwidth:"auto",autoWidth:true});Xmeb.App.lazyload({defObj:".home_main",defHeight:50});});</SCRIPT>
+
+
+ 
+  <div class="tongdao_tit"><a href="#">立即购买联通合约机</a></div>

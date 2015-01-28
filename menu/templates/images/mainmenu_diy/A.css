@@ -1,0 +1,38 @@
+#menumain{
+   margin:0;
+   white-space:nowrap;
+   overflow:hidden;
+   width:100%;
+   color:#f4f4f4;
+   background:url(menu.jpg) no-repeat;
+}
+
+#menumain .menumain{
+   float:left;
+   width:78px;
+   height:34px;
+   color:#f4f4f4;
+   background:url(li.jpg) right no-repeat;
+   text-align:center;
+   margin:0px;
+}
+
+
+#menumain .menumain a:link {
+   color: #f4f4f4; 
+   text-decoration: none;
+   font:bold 14px/34px Arial, Helvetica, sans-serif;
+}
+
+#menumain .menumain a:visited {
+   color: #f4f4f4; 
+   text-decoration: none;
+   font:bold 14px/34px Arial, Helvetica, sans-serif;
+}
+
+#menumain .menumain a:hover {
+   color: #ff4180; 
+   text-decoration: none;
+   font:bold 14px/34px Arial, Helvetica, sans-serif;
+} 
+

@@ -1,0 +1,33 @@
+<!-start->
+<link href="css/shoplist_diy.css" rel="stylesheet" type="text/css" />
+<script type=text/javascript src="{#CP#}js/cart.js"></script>
+
+<div id="shoplist_diy">
+<!-start->
+
+<!-list->
+<div class="shoplist_diy">
+		<div class="fang" style="width:{#picw#}px;height:{#pich#}px">
+			<div class="picFit" style="width:{#picw#}px;height:{#pich#}px">
+				<a href="{#link#}" target="{#target#}" ><img src="{#src#}" style="width:{#picw#}px;height:{#pich#}px" border="0" /></a>
+			</div>
+		</div>
+		<a href="{#link#}" target="{#target#}" class="prodtitle" {#bold#} {#red#} ><img src="images/li_02.gif" border="0" />&nbsp;{#title#}</a>
+		
+		<span class="marketprice">市场价：￥{#price0#}</span><br />
+		<span class="price">商城价：<font class="mprice">￥{#price#}</font></span><br />
+		
+		<div class="buttonzone"><img class="addtocart" src="images/add_cart.gif" alt="订购" border="0" onClick="addtocart('{#gid#}','1','')"></div>
+		
+</div>
+<!-list->
+
+<!-end->
+</div>
+
+<script>
+$(function() {
+$().picFit("{#fittype#}");
+});
+</script>
+<!-end->

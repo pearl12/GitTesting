@@ -1,0 +1,30 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript">
+var process_request = "{$lang.process_request}";
+</script>
+<div class="header_bg2">
+<div class="block">
+<div class="block clearfix" style=" position:relative; height:100px; ">
+ <div style="height:100px; padding-top:25px; padding-left:30px; margin-bottom:80px;">
+ <a href="../index.php" name="top"><img  src="../images/logo_user.gif" /></a>
+ </div>
+ <script type="text/javascript">
+    {literal}
+    function checkSearchForm()
+    {
+        if(document.getElementById('keyword').value)
+        {
+            return true;
+        }
+        else
+        {
+            alert("{$lang.no_keywords}");
+            return false;
+        }
+    }
+    {/literal}
+    </script>
+</div>
+
+</div>
+</div>

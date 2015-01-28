@@ -1,0 +1,36 @@
+.slides {
+	Z-INDEX: 1; POSITION: relative; WIDTH: 768px; HEIGHT: 430px; OVERFLOW: hidden
+}
+.slide-pic {
+	PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-LEFT: 0px; WIDTH: 768px; PADDING-RIGHT: 0px; HEIGHT: 400px; OVERFLOW: hidden; PADDING-TOP: 0px
+}
+.slide-pic IMG {
+	BORDER-BOTTOM: 0px; BORDER-LEFT: 0px; WIDTH: 768px; HEIGHT: 400px; BORDER-TOP: 0px; BORDER-RIGHT: 0px
+}
+.slide-pic LI {
+	DISPLAY: none
+}
+.slide-pic LI.cur {
+	DISPLAY: block
+}
+.slide-li {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; WIDTH: 88px; PADDING-RIGHT: 0px; FLOAT: right; HEIGHT: 22px; PADDING-TOP: 0px
+}
+.slide-li LI {
+	WIDTH: 22px; FLOAT: left; HEIGHT: 22px
+}
+.op LI {
+	BACKGROUND: url(/images_2012/main/main_cir01.gif) #ffffff no-repeat left top
+}
+.op LI.cur {
+	BACKGROUND: url(/images_2012/main/main_cir02.gif) #ffffff no-repeat left top
+}
+.slide-txt {
+	POSITION: absolute; PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px 0px 0px 680px; PADDING-LEFT: 0px; WIDTH: 88px; PADDING-RIGHT: 0px; HEIGHT: 22px; PADDING-TOP: 0px
+}
+.slide-txt LI {
+	WIDTH: 22px; FLOAT: left; HEIGHT: 22px
+}
+.slide-txt A {
+	WIDTH: 22px; DISPLAY: block; HEIGHT: 22px
+}

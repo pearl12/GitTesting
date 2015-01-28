@@ -1,0 +1,134 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript">
+var process_request = "{$lang.process_request}";
+</script>
+<script src="themes/xiaomi/js/transport.js"></script>
+
+<div class="block header_bg">
+<div class="block clearfix" style=" position:relative; height:100px; z-index:999999999 ">
+ <div class="logo">
+ <a href="../index.php" name="top"><img  src="../images/logo.gif" /></a>
+ </div>
+ <div class="f_r log">
+   <ul  >
+ 
+   <!--{if $navigator_list.top}-->
+   <li id="topNav" class="clearfix">
+    {insert_scripts files='utils.js'}
+   <font id="ECS_MEMBERZONE" style=" float:left">{* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *}{insert name='member_info'} </font>
+    <div  style=" float:left; margin-top:20px; font-weight:normal;" class="buy_car_bg clearfix"  onmouseover="this.className='buy_car_bg ul1_on'" onmouseout=  "this.className='buy_car_bg'">
+	<img src="../images/nav_cat.gif" style="float:left; padding-right:5px; padding-left:10px" /> 
+	<div id="ECS_CARTINFO" style="float:left">
+ <a href="flow.php">{insert name='cart_info'}</a> 
+     </div> 
+	 
+	 
+	 </div>
+    </li>
+   <!-- {/if} -->
+   
+   </ul>
+ </div>
+ <script type="text/javascript">
+    {literal}
+    function checkSearchForm()
+    {
+        if(document.getElementById('keyword').value)
+        {
+            return true;
+        }
+        else
+        {
+            alert("{$lang.no_keywords}");
+            return false;
+        }
+    }
+    {/literal}
+    </script>
+
+</div>
+
+<div  class="blank"></div>
+
+
+<div class="block" style="position:relative; z-index:999999">
+ 
+
+
+
+<div id="mainNav" class="clearfix"> 
+  <ul class="u1" onmouseover="this.className='u1 u1_over '" onmouseout="this.className='u1'"   >
+  <a class="a1"  href="../index.php"><font style="color:#f68336">{$lang.home}</font></a>
+  </ul>
+  <!-- {foreach name=nav_middle_list from=$navigator_list.middle item=nav} -->
+  <ul class="u1" onmouseover="this.className='u1 u1_over'" onmouseout="this.className='u1'" >
+  <a  class="a1"  href="{$nav.url}" {if $nav.opennew eq 1}target="_blank" {/if}>{$nav.name}</a>
+  
+  	<!-- {if $nav.cat_list}-->
+		<div class='sub_nav'>
+			<dl >
+			<!--{foreach from=$nav.cat_list item=cat}-->
+			<dd>
+			<a class="t" href="{$cat.url}">{$cat.name|escape:html}</a>
+			<!--{foreach from=$cat.cat_id item=child name=no}-->
+			<!-- {if $smarty.foreach.no.iteration<11}-->
+			<a class="b" href="{$child.url}">{$child.name|escape:html}</a>
+			<!-- {/if} -->
+			<!--{/foreach}-->
+			</dd>
+			<!--{/foreach}-->
+			</dl>
+		</div>
+		<div class="dang">
+		<img   src="../images/sub_nav_bg.gif">
+		</div>
+	<!-- {/if}-->
+  
+  
+  </ul>
+ <!-- {/foreach} -->
+</div>
+</div>
+</div>
+<script type="text/javascript">
+  window.setInterval("floatQQdone()",1);
+  lastScrollY=0;
+  function floatQQdone()
+  {
+	 var diffY;
+	if (document.documentElement && document.documentElement.scrollTop)
+		diffY = document.documentElement.scrollTop;
+	else if (document.body)
+		diffY = document.body.scrollTop;
+	else
+		{/*Netscape stuff*/}	
+	//alert(diffY);
+	percent=.1*(diffY-lastScrollY); 
+	if(percent>0)percent=Math.ceil(percent); 
+	else percent=Math.floor(percent); 
+	document.getElementById("floatQQ").style.top=parseInt(document.getElementById("floatQQ").style.top)+percent+"px";
+	lastScrollY=lastScrollY+percent; 
+	//alert(lastScrollY);
+  }
+</script>
+
+<script type="text/javascript">
+if (document.getElementById('history_list').innerHTML.replace(/\s/g,'').length<1)
+{
+    document.getElementById('history_div').style.display='none';
+}
+else
+{
+    document.getElementById('history_div').style.display='block';
+}
+function clear_history()
+{
+Ajax.call('user.php', 'act=clear_history',clear_history_Response, 'GET', 'TEXT',1,1);
+}
+function clear_history_Response(res)
+{
+document.getElementById('history_list').innerHTML = '{$lang.no_history}';
+}
+</script>
+
+
