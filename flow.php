@@ -47,40 +47,6 @@ $smarty->assign('lang',             $_LANG);
 $smarty->assign('show_marketprice', $_CFG['show_marketprice']);
 $smarty->assign('data_dir',    DATA_DIR);       // 数据目录
 
-//echo $_REQUEST['step'];exit;
-
-/*------------------------------------------------------ */
-
-//-- 添加商品到购物车(西安php服务中心修改)
-
-/*------------------------------------------------------ */
-if($_REQUEST['step'] =='all_addcart')
-{
-
-
-	//print_r($_POST['goods_id']);exit;
-   // $goods_id = $_POST["goods_id"];
-	//获得批发相关值
-	foreach($_POST['goods_id'] as $idx)
-	{
-	//	echo $idx."<br>";
-		//$number = $value;
-		// $number_all= 1;
-		//$goods_attr_id = join(",",$_POST['goods_attr'][$idx]);
-		//$product_sn = $_POST['product_sn'][$idx];
-	    addto_cart($idx,1,'','',$content);
-		//$arr[$idx] = array('number'=>$number,'goods_attr'=>$goods_attr_id,'product_sn'=>$product_sn); 
-	//	$sql = $GLOBALS['db']->query("insert into ".$GLOBALS['ecs']->table('cart_p')." (goods_id,product_id,number,goods_attr,product_sn,session_id) values('$goods_id','$idx','$number','$goods_attr_id','$product_sn','".SESS_ID."')");
-	}
-	//商品id
-//	$content = serialize($arr);
-	//$number = $number_all;
-	
-  ecs_header("Location:./flow.php\n");
-
-
-}
-
 /*------------------------------------------------------ */
 //-- 添加商品到购物车
 /*------------------------------------------------------ */
@@ -167,6 +133,13 @@ if ($_REQUEST['step'] == 'add_to_cart')
     /* 更新：购物车 */
     else
     {
+        if(!empty($goods->spec))
+        {
+            foreach ($goods->spec as  $key=>$val )
+            {
+                $goods->spec[$key]=intval($val);
+            }
+        }
         // 更新：添加到购物车
         if (addto_cart($goods->goods_id, $goods->number, $goods->spec, $goods->parent))
         {
@@ -268,6 +241,7 @@ elseif ($_REQUEST['step'] == 'login')
                 }
             }
 
+            $_POST['password']=isset($_POST['password']) ? trim($_POST['password']) : '';
             if ($user->login($_POST['username'], $_POST['password'],isset($_POST['remember'])))
             {
                 update_user_info();  //更新用户信息
@@ -1537,7 +1511,6 @@ elseif ($_REQUEST['step'] == 'done')
     }
     /* 订单中的总额 */
     $total = order_fee($order, $cart_goods, $consignee);
-
     $order['bonus']        = $total['bonus'];
     $order['goods_amount'] = $total['goods_price'];
     $order['discount']     = $total['discount'];

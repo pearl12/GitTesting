@@ -115,7 +115,6 @@ $modules['11_system']['navigator']                  = 'navigator.php?act=list';
 $modules['11_system']['file_check']                 = 'filecheck.php';
 //$modules['11_system']['fckfile_manage']             = 'fckfile_manage.php?act=list';
 $modules['11_system']['021_reg_fields']             = 'reg_fields.php?act=list';
- $modules['11_system']['website']  = 'website.php?act=list';
 
 
 $modules['12_template']['02_template_select']       = 'template.php?act=list';
@@ -135,6 +134,7 @@ $modules['13_backup']['convert']                    = 'convert.php?act=main';
 
 //$modules['14_sms']['02_sms_my_info']                = 'sms.php?act=display_my_info';
 $modules['14_sms']['03_sms_send']                   = 'sms.php?act=display_send_ui';
+$modules['14_sms']['04_sms_sign']                   = 'sms.php?act=sms_sign';
 //$modules['14_sms']['04_sms_charge']                 = 'sms.php?act=display_charge_ui';
 //$modules['14_sms']['05_sms_send_history']           = 'sms.php?act=display_send_history_ui';
 //$modules['14_sms']['06_sms_charge_history']         = 'sms.php?act=display_charge_history_ui';

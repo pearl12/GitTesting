@@ -943,6 +943,18 @@ function spec_price($spec)
 {
     if (!empty($spec))
     {
+        if(is_array($spec))
+        {
+            foreach($spec as $key=>$val)
+            {
+                $spec[$key]=addslashes($val);
+            }
+        }
+        else
+        {
+            $spec=addslashes($spec);
+        }
+
         $where = db_create_in($spec, 'goods_attr_id');
 
         $sql = 'SELECT SUM(attr_price) AS attr_price FROM ' . $GLOBALS['ecs']->table('goods_attr') . " WHERE $where";
@@ -1448,14 +1460,10 @@ function get_goods_fittings($goods_list = array())
         $arr[$temp_index]['parent_name']       = $row['parent_name'];//配件的基本件的名称
         $arr[$temp_index]['parent_short_name'] = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['parent_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['parent_name'];//配件的基本件显示的名称
-			
-			
         $arr[$temp_index]['goods_id']          = $row['goods_id'];//配件的商品ID
         $arr[$temp_index]['goods_name']        = $row['goods_name'];//配件的名称
         $arr[$temp_index]['short_name']        = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
             sub_str($row['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $row['goods_name'];//配件显示的名称
-			
-			$arr[$temp_index]['fittings_price_nformat']   = $row['goods_price'];
         $arr[$temp_index]['fittings_price']    = price_format($row['goods_price']);//配件价格
         $arr[$temp_index]['shop_price']        = price_format($row['shop_price']);//配件原价格
         $arr[$temp_index]['goods_thumb']       = get_image_path($row['goods_id'], $row['goods_thumb'], true);
