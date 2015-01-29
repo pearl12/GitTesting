@@ -1,16 +1,13 @@
 <?php
 
 /**
- * ECSHOP å‰å°å…¬ç”¨å‡½æ•°åº“
+ * ZG2020 Ç°Ì¨¹«ÓÃº¯Êı¿â
  * ============================================================================
- * * ç‰ˆæƒæ‰€æœ‰ 2005-2012 ä¸Šæµ·å•†æ´¾ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸ï¼Œå¹¶ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
- * ç½‘ç«™åœ°å€: http://www.ecshop.comï¼›
- * ----------------------------------------------------------------------------
- * è¿™ä¸æ˜¯ä¸€ä¸ªè‡ªç”±è½¯ä»¶ï¼æ‚¨åªèƒ½åœ¨ä¸ç”¨äºå•†ä¸šç›®çš„çš„å‰æä¸‹å¯¹ç¨‹åºä»£ç è¿›è¡Œä¿®æ”¹å’Œ
- * ä½¿ç”¨ï¼›ä¸å…è®¸å¯¹ç¨‹åºä»£ç ä»¥ä»»ä½•å½¢å¼ä»»ä½•ç›®çš„çš„å†å‘å¸ƒã€‚
+ * °æÈ¨ËùÓĞ 2010-2012 ±±¾©Õ¬¹º·»µç×ÓÉÌÎñÓĞÏŞ¹«Ë¾£¬²¢±£ÁôËùÓĞÈ¨Àû¡£
+ * ÍøÕ¾µØÖ·: http://www.zg2020.com¡£
  * ============================================================================
- * $Author: liubo $
- * $Id: lib_main.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: liuhui $
+ * $Id: lib_main.php 17063 2010-03-25 06:35:46Z liuhui $
 */
 
 if (!defined('IN_ECS'))
@@ -19,7 +16,7 @@ if (!defined('IN_ECS'))
 }
 
 /**
- * æ›´æ–°ç”¨æˆ·SESSION,COOKIEåŠç™»å½•æ—¶é—´ã€ç™»å½•æ¬¡æ•°ã€‚
+ * ¸üĞÂÓÃ»§SESSION,COOKIE¼°µÇÂ¼Ê±¼ä¡¢µÇÂ¼´ÎÊı¡£
  *
  * @access  public
  * @return  void
@@ -31,9 +28,9 @@ function update_user_info()
         return false;
     }
 
-    /* æŸ¥è¯¢ä¼šå‘˜ä¿¡æ¯ */
+    /* ²éÑ¯»áÔ±ĞÅÏ¢ */
     $time = date('Y-m-d');
-    $sql = 'SELECT u.user_money,u.email, u.pay_points, u.user_rank, u.rank_points, '.
+    $sql = 'SELECT u.user_money, u.pay_points, u.user_rank, u.rank_points, '.
             ' IFNULL(b.type_money, 0) AS user_bonus, u.last_login, u.last_ip'.
             ' FROM ' .$GLOBALS['ecs']->table('users'). ' AS u ' .
             ' LEFT JOIN ' .$GLOBALS['ecs']->table('user_bonus'). ' AS ub'.
@@ -43,28 +40,15 @@ function update_user_info()
             " WHERE u.user_id = '$_SESSION[user_id]'";
     if ($row = $GLOBALS['db']->getRow($sql))
     {
-        /* æ›´æ–°SESSION */
+        /* ¸üĞÂSESSION */
         $_SESSION['last_time']   = $row['last_login'];
         $_SESSION['last_ip']     = $row['last_ip'];
         $_SESSION['login_fail']  = 0;
-        $_SESSION['email']       = $row['email'];
 
-        /*åˆ¤æ–­æ˜¯å¦æ˜¯ç‰¹æ®Šç­‰çº§ï¼Œå¯èƒ½åå°æŠŠç‰¹æ®Šä¼šå‘˜ç»„æ›´æ”¹æ™®é€šä¼šå‘˜ç»„*/
-        if($row['user_rank'] >0)
-        {
-            $sql="SELECT special_rank from ".$GLOBALS['ecs']->table('user_rank')."where rank_id='$row[user_rank]'";
-            if($GLOBALS['db']->getOne($sql)==='0' || $GLOBALS['db']->getOne($sql)===null)
-            {   
-                $sql="update ".$GLOBALS['ecs']->table('users')."set user_rank='0' where user_id='$_SESSION[user_id]'";
-                $GLOBALS['db']->query($sql);
-                $row['user_rank']=0;
-            }
-        }
-
-        /* å–å¾—ç”¨æˆ·ç­‰çº§å’ŒæŠ˜æ‰£ */
+        /* È¡µÃÓÃ»§µÈ¼¶ºÍÕÛ¿Û */
         if ($row['user_rank'] == 0)
         {
-            // éç‰¹æ®Šç­‰çº§ï¼Œæ ¹æ®ç­‰çº§ç§¯åˆ†è®¡ç®—ç”¨æˆ·ç­‰çº§ï¼ˆæ³¨æ„ï¼šä¸åŒ…æ‹¬ç‰¹æ®Šç­‰çº§ï¼‰
+            // ·ÇÌØÊâµÈ¼¶£¬¸ù¾İµÈ¼¶»ı·Ö¼ÆËãÓÃ»§µÈ¼¶£¨×¢Òâ£º²»°üÀ¨ÌØÊâµÈ¼¶£©
             $sql = 'SELECT rank_id, discount FROM ' . $GLOBALS['ecs']->table('user_rank') . " WHERE special_rank = '0' AND min_points <= " . intval($row['rank_points']) . ' AND max_points > ' . intval($row['rank_points']);
             if ($row = $GLOBALS['db']->getRow($sql))
             {
@@ -79,7 +63,7 @@ function update_user_info()
         }
         else
         {
-            // ç‰¹æ®Šç­‰çº§
+            // ÌØÊâµÈ¼¶
             $sql = 'SELECT rank_id, discount FROM ' . $GLOBALS['ecs']->table('user_rank') . " WHERE rank_id = '$row[user_rank]'";
             if ($row = $GLOBALS['db']->getRow($sql))
             {
@@ -94,7 +78,7 @@ function update_user_info()
         }
     }
 
-    /* æ›´æ–°ç™»å½•æ—¶é—´ï¼Œç™»å½•æ¬¡æ•°åŠç™»å½•ip */
+    /* ¸üĞÂµÇÂ¼Ê±¼ä£¬µÇÂ¼´ÎÊı¼°µÇÂ¼ip */
     $sql = "UPDATE " .$GLOBALS['ecs']->table('users'). " SET".
            " visit_count = visit_count + 1, ".
            " last_ip = '" .real_ip(). "',".
@@ -104,12 +88,12 @@ function update_user_info()
 }
 
 /**
- *  è·å–ç”¨æˆ·ä¿¡æ¯æ•°ç»„
+ *  »ñÈ¡ÓÃ»§ĞÅÏ¢Êı×é
  *
  * @access  public
  * @param
  *
- * @return array        $user       ç”¨æˆ·ä¿¡æ¯æ•°ç»„
+ * @return array        $user       ÓÃ»§ĞÅÏ¢Êı×é
  */
 function get_user_info($id=0)
 {
@@ -132,16 +116,16 @@ function get_user_info($id=0)
     return $user;
 }
 /**
- * å–å¾—å½“å‰ä½ç½®å’Œé¡µé¢æ ‡é¢˜
+ * È¡µÃµ±Ç°Î»ÖÃºÍÒ³Ãæ±êÌâ
  *
  * @access  public
- * @param   integer     $cat    åˆ†ç±»ç¼–å·ï¼ˆåªæœ‰å•†å“åŠåˆ†ç±»ã€æ–‡ç« åŠåˆ†ç±»ç”¨åˆ°ï¼‰
- * @param   string      $str    å•†å“åã€æ–‡ç« æ ‡é¢˜æˆ–å…¶ä»–é™„åŠ çš„å†…å®¹ï¼ˆæ— é“¾æ¥ï¼‰
+ * @param   integer     $cat    ·ÖÀà±àºÅ£¨Ö»ÓĞÉÌÆ·¼°·ÖÀà¡¢ÎÄÕÂ¼°·ÖÀàÓÃµ½£©
+ * @param   string      $str    ÉÌÆ·Ãû¡¢ÎÄÕÂ±êÌâ»òÆäËû¸½¼ÓµÄÄÚÈİ£¨ÎŞÁ´½Ó£©
  * @return  array
  */
 function assign_ur_here($cat = 0, $str = '')
 {
-    /* åˆ¤æ–­æ˜¯å¦é‡å†™ï¼Œå–å¾—æ–‡ä»¶å */
+    /* ÅĞ¶ÏÊÇ·ñÖØĞ´£¬È¡µÃÎÄ¼şÃû */
     $cur_url = basename(PHP_SELF);
     if (intval($GLOBALS['_CFG']['rewrite']))
     {
@@ -152,17 +136,17 @@ function assign_ur_here($cat = 0, $str = '')
         $filename = substr($cur_url, 0, -4);
     }
 
-    /* åˆå§‹åŒ–â€œé¡µé¢æ ‡é¢˜â€å’Œâ€œå½“å‰ä½ç½®â€ */
-    $page_title = $GLOBALS['_CFG']['shop_title'] . ' - ' . 'Powered by ECShop';
+    /* ³õÊ¼»¯¡°Ò³Ãæ±êÌâ¡±ºÍ¡°µ±Ç°Î»ÖÃ¡± */
+    $page_title = $GLOBALS['_CFG']['shop_title'] ;
     $ur_here    = '<a href=".">' . $GLOBALS['_LANG']['home'] . '</a>';
 
-    /* æ ¹æ®æ–‡ä»¶ååˆ†åˆ«å¤„ç†ä¸­é—´çš„éƒ¨åˆ† */
+    /* ¸ù¾İÎÄ¼şÃû·Ö±ğ´¦ÀíÖĞ¼äµÄ²¿·Ö */
     if ($filename != 'index')
     {
-        /* å¤„ç†æœ‰åˆ†ç±»çš„ */
+        /* ´¦ÀíÓĞ·ÖÀàµÄ */
         if (in_array($filename, array('category', 'goods', 'article_cat', 'article', 'brand')))
         {
-            /* å•†å“åˆ†ç±»æˆ–å•†å“ */
+            /* ÉÌÆ··ÖÀà»òÉÌÆ· */
             if ('category' == $filename || 'goods' == $filename || 'brand' == $filename)
             {
                 if ($cat > 0)
@@ -177,7 +161,7 @@ function assign_ur_here($cat = 0, $str = '')
                     $cat_arr = array();
                 }
             }
-            /* æ–‡ç« åˆ†ç±»æˆ–æ–‡ç«  */
+            /* ÎÄÕÂ·ÖÀà»òÎÄÕÂ */
             elseif ('article_cat' == $filename || 'article' == $filename)
             {
                 if ($cat > 0)
@@ -193,7 +177,7 @@ function assign_ur_here($cat = 0, $str = '')
                 }
             }
 
-            /* å¾ªç¯åˆ†ç±» */
+            /* Ñ­»··ÖÀà */
             if (!empty($cat_arr))
             {
                 krsort($cat_arr);
@@ -206,10 +190,10 @@ function assign_ur_here($cat = 0, $str = '')
                 }
             }
         }
-        /* å¤„ç†æ— åˆ†ç±»çš„ */
+        /* ´¦ÀíÎŞ·ÖÀàµÄ */
         else
         {
-            /* å›¢è´­ */
+            /* ÍÅ¹º */
             if ('group_buy' == $filename)
             {
                 $page_title = $GLOBALS['_LANG']['group_buy_goods'] . '_' . $page_title;
@@ -217,7 +201,7 @@ function assign_ur_here($cat = 0, $str = '')
                 $ur_here   .= ' <code>&gt;</code> <a href="group_buy.php">' .
                                 $GLOBALS['_LANG']['group_buy_goods'] . '</a>';
             }
-            /* æ‹å– */
+            /* ÅÄÂô */
             elseif ('auction' == $filename)
             {
                 $page_title = $GLOBALS['_LANG']['auction'] . '_' . $page_title;
@@ -225,14 +209,14 @@ function assign_ur_here($cat = 0, $str = '')
                 $ur_here   .= ' <code>&gt;</code> <a href="auction.php">' .
                                 $GLOBALS['_LANG']['auction'] . '</a>';
             }
-            /* å¤ºå® */
+            /* ¶á±¦ */
             elseif ('snatch' == $filename)
             {
                 $page_title = $GLOBALS['_LANG']['snatch'] . '_' . $page_title;
                 $args       = array('id' => '0');
                 $ur_here   .= ' <code> &gt; </code><a href="snatch.php">' .                                 $GLOBALS['_LANG']['snatch_list'] . '</a>';
             }
-            /* æ‰¹å‘ */
+            /* Åú·¢ */
             elseif ('wholesale' == $filename)
             {
                 $page_title = $GLOBALS['_LANG']['wholesale'] . '_' . $page_title;
@@ -240,7 +224,7 @@ function assign_ur_here($cat = 0, $str = '')
                 $ur_here   .= ' <code>&gt;</code> <a href="wholesale.php">' .
                                 $GLOBALS['_LANG']['wholesale'] . '</a>';
             }
-            /* ç§¯åˆ†å…‘æ¢ */
+            /* »ı·Ö¶Ò»» */
             elseif ('exchange' == $filename)
             {
                 $page_title = $GLOBALS['_LANG']['exchange'] . '_' . $page_title;
@@ -248,26 +232,26 @@ function assign_ur_here($cat = 0, $str = '')
                 $ur_here   .= ' <code>&gt;</code> <a href="exchange.php">' .
                                 $GLOBALS['_LANG']['exchange'] . '</a>';
             }
-            /* å…¶ä»–çš„åœ¨è¿™é‡Œè¡¥å…… */
+            /* ÆäËûµÄÔÚÕâÀï²¹³ä */
         }
     }
 
-    /* å¤„ç†æœ€åä¸€éƒ¨åˆ† */
+    /* ´¦Àí×îºóÒ»²¿·Ö */
     if (!empty($str))
     {
         $page_title  = $str . '_' . $page_title;
         $ur_here    .= ' <code>&gt;</code> ' . $str;
     }
 
-    /* è¿”å›å€¼ */
+    /* ·µ»ØÖµ */
     return array('title' => $page_title, 'ur_here' => $ur_here);
 }
 
 /**
- * è·å¾—æŒ‡å®šåˆ†ç±»çš„æ‰€æœ‰ä¸Šçº§åˆ†ç±»
+ * »ñµÃÖ¸¶¨·ÖÀàµÄËùÓĞÉÏ¼¶·ÖÀà
  *
  * @access  public
- * @param   integer $cat    åˆ†ç±»ç¼–å·
+ * @param   integer $cat    ·ÖÀà±àºÅ
  * @return  array
  */
 function get_parent_cats($cat)
@@ -313,11 +297,11 @@ function get_parent_cats($cat)
 }
 
 /**
- * æ ¹æ®æä¾›çš„æ•°ç»„ç¼–è¯‘æˆé¡µé¢æ ‡é¢˜
+ * ¸ù¾İÌá¹©µÄÊı×é±àÒë³ÉÒ³Ãæ±êÌâ
  *
  * @access  public
- * @param   string  $type   ç±»å‹
- * @param   array   $arr    åˆ†ç±»æ•°ç»„
+ * @param   string  $type   ÀàĞÍ
+ * @param   array   $arr    ·ÖÀàÊı×é
  * @return  string
  */
 function build_pagetitle($arr, $type = 'category')
@@ -333,11 +317,11 @@ function build_pagetitle($arr, $type = 'category')
 }
 
 /**
- * æ ¹æ®æä¾›çš„æ•°ç»„ç¼–è¯‘æˆå½“å‰ä½ç½®
+ * ¸ù¾İÌá¹©µÄÊı×é±àÒë³Éµ±Ç°Î»ÖÃ
  *
  * @access  public
- * @param   string  $type   ç±»å‹
- * @param   array   $arr    åˆ†ç±»æ•°ç»„
+ * @param   string  $type   ÀàĞÍ
+ * @param   array   $arr    ·ÖÀàÊı×é
  * @return  void
  */
 function build_urhere($arr, $type = 'category')
@@ -365,10 +349,10 @@ function build_urhere($arr, $type = 'category')
 }
 
 /**
- * è·å¾—æŒ‡å®šé¡µé¢çš„åŠ¨æ€å†…å®¹
+ * »ñµÃÖ¸¶¨Ò³ÃæµÄ¶¯Ì¬ÄÚÈİ
  *
  * @access  public
- * @param   string  $tmp    æ¨¡æ¿åç§°
+ * @param   string  $tmp    Ä£°åÃû³Æ
  * @return  void
  */
 function assign_dynamic($tmp)
@@ -382,18 +366,18 @@ function assign_dynamic($tmp)
         switch ($row['type'])
         {
             case 1:
-                /* åˆ†ç±»ä¸‹çš„å•†å“ */
+                /* ·ÖÀàÏÂµÄÉÌÆ· */
                 $GLOBALS['smarty']->assign('goods_cat_' . $row['id'], assign_cat_goods($row['id'], $row['number']));
             break;
             case 2:
-                /* å“ç‰Œçš„å•†å“ */
+                /* Æ·ÅÆµÄÉÌÆ· */
                 $brand_goods = assign_brand_goods($row['id'], $row['number']);
 
                 $GLOBALS['smarty']->assign('brand_goods_' . $row['id'], $brand_goods['goods']);
                 $GLOBALS['smarty']->assign('goods_brand_' . $row['id'], $brand_goods['brand']);
             break;
             case 3:
-                /* æ–‡ç« åˆ—è¡¨ */
+                /* ÎÄÕÂÁĞ±í */
                 $cat_articles = assign_articles($row['id'], $row['number']);
 
                 $GLOBALS['smarty']->assign('articles_cat_' . $row['id'], $cat_articles['cat']);
@@ -404,11 +388,11 @@ function assign_dynamic($tmp)
 }
 
 /**
- * åˆ†é…æ–‡ç« åˆ—è¡¨ç»™smarty
+ * ·ÖÅäÎÄÕÂÁĞ±í¸øsmarty
  *
  * @access  public
- * @param   integer     $id     æ–‡ç« åˆ†ç±»çš„ç¼–å·
- * @param   integer     $num    æ–‡ç« æ•°é‡
+ * @param   integer     $id     ÎÄÕÂ·ÖÀàµÄ±àºÅ
+ * @param   integer     $num    ÎÄÕÂÊıÁ¿
  * @return  array
  */
 function assign_articles($id, $num)
@@ -426,7 +410,7 @@ function assign_articles($id, $num)
 }
 
 /**
- * åˆ†é…å¸®åŠ©ä¿¡æ¯
+ * ·ÖÅä°ïÖúĞÅÏ¢
  *
  * @access  public
  * @return  array
@@ -457,20 +441,20 @@ function get_shop_help()
 }
 
 /**
- * åˆ›å»ºåˆ†é¡µä¿¡æ¯
+ * ´´½¨·ÖÒ³ĞÅÏ¢
  *
  * @access  public
- * @param   string  $app            ç¨‹åºåç§°ï¼Œå¦‚category
- * @param   string  $cat            åˆ†ç±»ID
- * @param   string  $record_count   è®°å½•æ€»æ•°
- * @param   string  $size           æ¯é¡µè®°å½•æ•°
- * @param   string  $sort           æ’åºç±»å‹
- * @param   string  $order          æ’åºé¡ºåº
- * @param   string  $page           å½“å‰é¡µ
- * @param   string  $keywords       æŸ¥è¯¢å…³é”®å­—
- * @param   string  $brand          å“ç‰Œ
- * @param   string  $price_min      æœ€å°ä»·æ ¼
- * @param   string  $price_max      æœ€é«˜ä»·æ ¼
+ * @param   string  $app            ³ÌĞòÃû³Æ£¬Èçcategory
+ * @param   string  $cat            ·ÖÀàID
+ * @param   string  $record_count   ¼ÇÂ¼×ÜÊı
+ * @param   string  $size           Ã¿Ò³¼ÇÂ¼Êı
+ * @param   string  $sort           ÅÅĞòÀàĞÍ
+ * @param   string  $order          ÅÅĞòË³Ğò
+ * @param   string  $page           µ±Ç°Ò³
+ * @param   string  $keywords       ²éÑ¯¹Ø¼ü×Ö
+ * @param   string  $brand          Æ·ÅÆ
+ * @param   string  $price_min      ×îĞ¡¼Û¸ñ
+ * @param   string  $price_max      ×î¸ß¼Û¸ñ
  * @return  void
  */
 function assign_pager($app, $cat, $record_count, $size, $sort, $order, $page = 1,
@@ -521,7 +505,7 @@ function assign_pager($app, $cat, $record_count, $size, $sort, $order, $page = 1
             $uri_args = array('cid' => $cat, 'integral_min'=>$price_min, 'integral_max'=>$price_max, 'sort' => $sort, 'order' => $order, 'display' => $display_type);
             break;
     }
-    /* åˆ†é¡µæ ·å¼ */
+    /* ·ÖÒ³ÑùÊ½ */
     $pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
 
     $page_prev  = ($page > 1) ? $page - 1 : 1;
@@ -551,9 +535,9 @@ function assign_pager($app, $cat, $record_count, $size, $sort, $order, $page = 1
     }
     else
     {
-        $_pagenum = 10;     // æ˜¾ç¤ºçš„é¡µç 
-        $_offset = 2;       // å½“å‰é¡µåç§»å€¼
-        $_from = $_to = 0;  // å¼€å§‹é¡µ, ç»“æŸé¡µ
+        $_pagenum = 10;     // ÏÔÊ¾µÄÒ³Âë
+        $_offset = 2;       // µ±Ç°Ò³Æ«ÒÆÖµ
+        $_from = $_to = 0;  // ¿ªÊ¼Ò³, ½áÊøÒ³
         if($_pagenum > $page_count)
         {
             $_from = 1;
@@ -622,14 +606,14 @@ function assign_pager($app, $cat, $record_count, $size, $sort, $order, $page = 1
 }
 
 /**
- *  ç”Ÿæˆç»™pager.lbièµ‹å€¼çš„æ•°ç»„
+ *  Éú³É¸øpager.lbi¸³ÖµµÄÊı×é
  *
  * @access  public
- * @param   string      $url        åˆ†é¡µçš„é“¾æ¥åœ°å€(å¿…é¡»æ˜¯å¸¦æœ‰å‚æ•°çš„åœ°å€ï¼Œè‹¥ä¸æ˜¯å¯ä»¥ä¼ªé€ ä¸€ä¸ªæ— ç”¨å‚æ•°)
- * @param   array       $param      é“¾æ¥å‚æ•° keyä¸ºå‚æ•°åï¼Œvalueä¸ºå‚æ•°å€¼
- * @param   int         $record     è®°å½•æ€»æ•°é‡
- * @param   int         $page       å½“å‰é¡µæ•°
- * @param   int         $size       æ¯é¡µå¤§å°
+ * @param   string      $url        ·ÖÒ³µÄÁ´½ÓµØÖ·(±ØĞëÊÇ´øÓĞ²ÎÊıµÄµØÖ·£¬Èô²»ÊÇ¿ÉÒÔÎ±ÔìÒ»¸öÎŞÓÃ²ÎÊı)
+ * @param   array       $param      Á´½Ó²ÎÊı keyÎª²ÎÊıÃû£¬valueÎª²ÎÊıÖµ
+ * @param   int         $record     ¼ÇÂ¼×ÜÊıÁ¿
+ * @param   int         $page       µ±Ç°Ò³Êı
+ * @param   int         $size       Ã¿Ò³´óĞ¡
  *
  * @return  array       $pager
  */
@@ -654,13 +638,13 @@ function get_pager($url, $param, $record_count, $page = 1, $size = 10)
     {
         $page = $page_count;
     }
-    /* åˆ†é¡µæ ·å¼ */
+    /* ·ÖÒ³ÑùÊ½ */
     $pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
 
     $page_prev  = ($page > 1) ? $page - 1 : 1;
     $page_next  = ($page < $page_count) ? $page + 1 : $page_count;
 
-    /* å°†å‚æ•°åˆæˆurlå­—ä¸² */
+    /* ½«²ÎÊıºÏ³Éurl×Ö´® */
     $param_url = '?';
     foreach ($param AS $key => $value)
     {
@@ -688,9 +672,9 @@ function get_pager($url, $param, $record_count, $page = 1, $size = 10)
     }
     else
     {
-        $_pagenum = 10;     // æ˜¾ç¤ºçš„é¡µç 
-        $_offset = 2;       // å½“å‰é¡µåç§»å€¼
-        $_from = $_to = 0;  // å¼€å§‹é¡µ, ç»“æŸé¡µ
+        $_pagenum = 10;     // ÏÔÊ¾µÄÒ³Âë
+        $_offset = 2;       // µ±Ç°Ò³Æ«ÒÆÖµ
+        $_from = $_to = 0;  // ¿ªÊ¼Ò³, ½áÊøÒ³
         if($_pagenum > $page_count)
         {
             $_from = 1;
@@ -733,15 +717,15 @@ function get_pager($url, $param, $record_count, $page = 1, $size = 10)
 }
 
 /**
- * è°ƒç”¨è°ƒæŸ¥å†…å®¹
+ * µ÷ÓÃµ÷²éÄÚÈİ
  *
  * @access  public
- * @param   integer $id   è°ƒæŸ¥çš„ç¼–å·
+ * @param   integer $id   µ÷²éµÄ±àºÅ
  * @return  array
  */
 function get_vote($id = '')
 {
-    /* éšæœºå–å¾—ä¸€ä¸ªè°ƒæŸ¥çš„ä¸»é¢˜ */
+    /* Ëæ»úÈ¡µÃÒ»¸öµ÷²éµÄÖ÷Ìâ */
     if (empty($id))
     {
         $time = gmtime();
@@ -761,14 +745,14 @@ function get_vote($id = '')
 
     if ($vote_arr !== false && !empty($vote_arr))
     {
-        /* é€šè¿‡è°ƒæŸ¥çš„ID,æŸ¥è¯¢è°ƒæŸ¥é€‰é¡¹ */
+        /* Í¨¹ıµ÷²éµÄID,²éÑ¯µ÷²éÑ¡Ïî */
         $sql_option = 'SELECT v.*, o.option_id, o.vote_id, o.option_name, o.option_count ' .
                       'FROM ' . $GLOBALS['ecs']->table('vote') . ' AS v, ' .
                             $GLOBALS['ecs']->table('vote_option') . ' AS o ' .
                       "WHERE o.vote_id = v.vote_id AND o.vote_id = '$vote_arr[vote_id]' ORDER BY o.option_order ASC, o.option_id DESC";
         $res = $GLOBALS['db']->getAll($sql_option);
 
-        /* æ€»ç¥¨æ•° */
+        /* ×ÜÆ±Êı */
         $sql = 'SELECT SUM(option_count) AS all_option FROM ' . $GLOBALS['ecs']->table('vote_option') .
                " WHERE vote_id = '" . $vote_arr['vote_id'] . "' GROUP BY vote_id";
         $option_num = $GLOBALS['db']->getOne($sql);
@@ -808,7 +792,7 @@ function get_vote($id = '')
 }
 
 /**
- * è·å¾—æµè§ˆå™¨åç§°å’Œç‰ˆæœ¬
+ * »ñµÃä¯ÀÀÆ÷Ãû³ÆºÍ°æ±¾
  *
  * @access  public
  * @return  string
@@ -881,7 +865,7 @@ function get_user_browser()
 }
 
 /**
- * åˆ¤æ–­æ˜¯å¦ä¸ºæœç´¢å¼•æ“èœ˜è››
+ * ÅĞ¶ÏÊÇ·ñÎªËÑË÷ÒıÇæÖ©Öë
  *
  * @access  public
  * @return  string
@@ -951,7 +935,7 @@ function is_spider($record = true)
 }
 
 /**
- * è·å¾—å®¢æˆ·ç«¯çš„æ“ä½œç³»ç»Ÿ
+ * »ñµÃ¿Í»§¶ËµÄ²Ù×÷ÏµÍ³
  *
  * @access  private
  * @return  void
@@ -1086,7 +1070,8 @@ function get_os()
 }
 
 /**
- * ç»Ÿè®¡è®¿é—®ä¿¡æ¯
+
+ * Í³¼Æ·ÃÎÊĞÅÏ¢
  *
  * @access  public
  * @return  void
@@ -1098,7 +1083,7 @@ function visit_stats()
         return;
     }
     $time = gmtime();
-    /* æ£€æŸ¥å®¢æˆ·ç«¯æ˜¯å¦å­˜åœ¨è®¿é—®ç»Ÿè®¡çš„cookie */
+    /* ¼ì²é¿Í»§¶ËÊÇ·ñ´æÔÚ·ÃÎÊÍ³¼ÆµÄcookie */
     $visit_times = (!empty($_COOKIE['ECS']['visit_times'])) ? intval($_COOKIE['ECS']['visit_times']) + 1 : 1;
     setcookie('ECS[visit_times]', $visit_times, $time + 86400 * 365, '/');
 
@@ -1107,7 +1092,7 @@ function visit_stats()
     $ip       = real_ip();
     $area     = ecs_geoip($ip);
 
-    /* è¯­è¨€ */
+    /* ÓïÑÔ */
     if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
     {
         $pos  = strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ';');
@@ -1118,7 +1103,7 @@ function visit_stats()
         $lang = '';
     }
 
-    /* æ¥æº */
+    /* À´Ô´ */
     if (!empty($_SERVER['HTTP_REFERER']) && strlen($_SERVER['HTTP_REFERER']) > 9)
     {
         $pos = strpos($_SERVER['HTTP_REFERER'], '/', 9);
@@ -1127,7 +1112,7 @@ function visit_stats()
             $domain = substr($_SERVER['HTTP_REFERER'], 0, $pos);
             $path   = substr($_SERVER['HTTP_REFERER'], $pos);
 
-            /* æ¥æºå…³é”®å­— */
+            /* À´Ô´¹Ø¼ü×Ö */
             if (!empty($domain) && !empty($path))
             {
                 save_searchengine_keyword($domain, $path);
@@ -1148,12 +1133,12 @@ function visit_stats()
                 'referer_domain, referer_path, access_url, access_time' .
             ') VALUES (' .
                 "'$ip', '$visit_times', '$browser', '$os', '$lang', '$area', ".
-                "'" . htmlspecialchars(addslashes($domain)) ."', '" . htmlspecialchars(addslashes($path)) ."', '" . htmlspecialchars(addslashes(PHP_SELF)) ."', '" . $time . "')";
+                "'" . addslashes($domain) ."', '" . addslashes($path) ."', '" . addslashes(PHP_SELF) ."', '" . $time . "')";
     $GLOBALS['db']->query($sql);
 }
 
 /**
- * ä¿å­˜æœç´¢å¼•æ“å…³é”®å­—
+ * ±£´æËÑË÷ÒıÇæ¹Ø¼ü×Ö
  *
  * @access  public
  * @return  void
@@ -1273,12 +1258,12 @@ function save_searchengine_keyword($domain, $path)
             $keywords = ecs_iconv('UTF8', 'GBK', $keywords);
         }
 
-        $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => htmlspecialchars(addslashes($keywords)), 'count' => 1), array('count' => 1));
+        $GLOBALS['db']->autoReplace($GLOBALS['ecs']->table('keywords'), array('date' => local_date('Y-m-d'), 'searchengine' => $searchengine, 'keyword' => addslashes($keywords), 'count' => 1), array('count' => 1));
     }
 }
 
 /**
- * è·å¾—æŒ‡å®šç”¨æˆ·ã€å•†å“çš„æ‰€æœ‰æ ‡è®°
+ * »ñµÃÖ¸¶¨ÓÃ»§¡¢ÉÌÆ·µÄËùÓĞ±ê¼Ç
  *
  * @access  public
  * @param   integer $goods_id
@@ -1316,11 +1301,11 @@ function get_tags($goods_id = 0, $user_id = 0)
 }
 
 /**
- * è·å–æŒ‡å®šä¸»é¢˜æŸä¸ªæ¨¡æ¿çš„ä¸»é¢˜çš„åŠ¨æ€æ¨¡å—
+ * »ñÈ¡Ö¸¶¨Ö÷ÌâÄ³¸öÄ£°åµÄÖ÷ÌâµÄ¶¯Ì¬Ä£¿é
  *
  * @access  public
- * @param   string       $theme    æ¨¡æ¿ä¸»é¢˜
- * @param   string       $tmp      æ¨¡æ¿åç§°
+ * @param   string       $theme    Ä£°åÖ÷Ìâ
+ * @param   string       $tmp      Ä£°åÃû³Æ
  *
  * @return array()
  */
@@ -1348,12 +1333,12 @@ function get_dyna_libs($theme, $tmp)
 }
 
 /**
- * æ›¿æ¢åŠ¨æ€æ¨¡å—
+ * Ìæ»»¶¯Ì¬Ä£¿é
  *
  * @access  public
- * @param   string       $matches    åŒ¹é…å†…å®¹
+ * @param   string       $matches    Æ¥ÅäÄÚÈİ
  *
- * @return string        ç»“æœ
+ * @return string        ½á¹û
  */
 function dyna_libs_replace($matches)
 {
@@ -1365,19 +1350,19 @@ function dyna_libs_replace($matches)
         switch($row['type'])
         {
             case 1:
-                // åˆ†ç±»çš„å•†å“
+                // ·ÖÀàµÄÉÌÆ·
                 $str = '{assign var="cat_goods" value=$cat_goods_' .$row['id']. '}{assign var="goods_cat" value=$goods_cat_' .$row['id']. '}';
                 break;
             case 2:
-                // å“ç‰Œçš„å•†å“
+                // Æ·ÅÆµÄÉÌÆ·
                 $str = '{assign var="brand_goods" value=$brand_goods_' .$row['id']. '}{assign var="goods_brand" value=$goods_brand_' .$row['id']. '}';
                 break;
             case 3:
-                // æ–‡ç« åˆ—è¡¨
+                // ÎÄÕÂÁĞ±í
                 $str = '{assign var="articles" value=$articles_' .$row['id']. '}{assign var="articles_cat" value=$articles_cat_' .$row['id']. '}';
                 break;
             case 4:
-                //å¹¿å‘Šä½
+                //¹ã¸æÎ»
                 $str = '{assign var="ads_id" value=' . $row['id'] . '}{assign var="ads_num" value=' . $row['number'] . '}';
                 break;
         }
@@ -1390,19 +1375,19 @@ function dyna_libs_replace($matches)
 }
 
 /**
- * å¤„ç†ä¸Šä¼ æ–‡ä»¶ï¼Œå¹¶è¿”å›ä¸Šä¼ å›¾ç‰‡å(ä¸Šä¼ å¤±è´¥æ—¶è¿”å›å›¾ç‰‡åä¸ºç©ºï¼‰
+ * ´¦ÀíÉÏ´«ÎÄ¼ş£¬²¢·µ»ØÉÏ´«Í¼Æ¬Ãû(ÉÏ´«Ê§°ÜÊ±·µ»ØÍ¼Æ¬ÃûÎª¿Õ£©
  *
  * @access  public
- * @param array     $upload     $_FILES æ•°ç»„
- * @param array     $type       å›¾ç‰‡æ‰€å±ç±»åˆ«ï¼Œå³dataç›®å½•ä¸‹çš„æ–‡ä»¶å¤¹å
+ * @param array     $upload     $_FILES Êı×é
+ * @param array     $type       Í¼Æ¬ËùÊôÀà±ğ£¬¼´dataÄ¿Â¼ÏÂµÄÎÄ¼ş¼ĞÃû
  *
- * @return string               ä¸Šä¼ å›¾ç‰‡å
+ * @return string               ÉÏ´«Í¼Æ¬Ãû
  */
 function upload_file($upload, $type)
 {
     if (!empty($upload['tmp_name']))
     {
-        $ftype = check_file_type($upload['tmp_name'], $upload['name'], '|png|jpg|jpeg|gif|doc|xls|txt|zip|ppt|pdf|rar|docx|xlsx|pptx|');
+        $ftype = check_file_type($upload['tmp_name'], $upload['name'], '|png|jpg|jpeg|gif|doc|xls|txt|zip|ppt|pdf|rar|');
         if (!empty($ftype))
         {
             $name = date('Ymd');
@@ -1440,14 +1425,14 @@ function upload_file($upload, $type)
 }
 
 /**
- * æ˜¾ç¤ºä¸€ä¸ªæç¤ºä¿¡æ¯
+ * ÏÔÊ¾Ò»¸öÌáÊ¾ĞÅÏ¢
  *
  * @access  public
  * @param   string  $content
  * @param   string  $link
  * @param   string  $href
- * @param   string  $type               ä¿¡æ¯ç±»å‹ï¼šwarning, error, info
- * @param   string  $auto_redirect      æ˜¯å¦è‡ªåŠ¨è·³è½¬
+ * @param   string  $type               ĞÅÏ¢ÀàĞÍ£ºwarning, error, info
+ * @param   string  $auto_redirect      ÊÇ·ñ×Ô¶¯Ìø×ª
  * @return  void
  */
 function show_message($content, $links = '', $hrefs = '', $type = 'info', $auto_redirect = true)
@@ -1476,12 +1461,12 @@ function show_message($content, $links = '', $hrefs = '', $type = 'info', $auto_
 
     $msg['type']    = $type;
     $position = assign_ur_here(0, $GLOBALS['_LANG']['sys_msg']);
-    $GLOBALS['smarty']->assign('page_title', $position['title']);   // é¡µé¢æ ‡é¢˜
-    $GLOBALS['smarty']->assign('ur_here',    $position['ur_here']); // å½“å‰ä½ç½®
+    $GLOBALS['smarty']->assign('page_title', $position['title']);   // Ò³Ãæ±êÌâ
+    $GLOBALS['smarty']->assign('ur_here',    $position['ur_here']); // µ±Ç°Î»ÖÃ
 
     if (is_null($GLOBALS['smarty']->get_template_vars('helps')))
     {
-        $GLOBALS['smarty']->assign('helps', get_shop_help()); // ç½‘åº—å¸®åŠ©
+        $GLOBALS['smarty']->assign('helps', get_shop_help()); // Íøµê°ïÖú
     }
 
     $GLOBALS['smarty']->assign('auto_redirect', $auto_redirect);
@@ -1492,12 +1477,12 @@ function show_message($content, $links = '', $hrefs = '', $type = 'info', $auto_
 }
 
 /**
- * å°†ä¸€ä¸ªå½¢å¦‚+10, 10, -10, 10%çš„å­—ä¸²è½¬æ¢ä¸ºç›¸åº”æ•°å­—ï¼Œå¹¶è¿”å›æ“ä½œç¬¦å·
+ * ½«Ò»¸öĞÎÈç+10, 10, -10, 10%µÄ×Ö´®×ª»»ÎªÏàÓ¦Êı×Ö£¬²¢·µ»Ø²Ù×÷·ûºÅ
  *
  * @access  public
- * @param   string      str     è¦æ ¼å¼åŒ–çš„æ•°æ®
- * @param   char        operate æ“ä½œç¬¦å·ï¼Œåªèƒ½è¿”å›â€˜+â€™æˆ–â€˜*â€™;
- * @return  float       value   æµ®ç‚¹æ•°
+ * @param   string      str     Òª¸ñÊ½»¯µÄÊı¾İ
+ * @param   char        operate ²Ù×÷·ûºÅ£¬Ö»ÄÜ·µ»Ø¡®+¡¯»ò¡®*¡¯;
+ * @return  float       value   ¸¡µãÊı
  */
 function parse_rate_value($str, &$operate)
 {
@@ -1530,15 +1515,15 @@ function parse_rate_value($str, &$operate)
 }
 
 /**
- * é‡æ–°è®¡ç®—è´­ç‰©è½¦ä¸­çš„å•†å“ä»·æ ¼ï¼šç›®çš„æ˜¯å½“ç”¨æˆ·ç™»å½•æ—¶äº«å—ä¼šå‘˜ä»·æ ¼ï¼Œå½“ç”¨æˆ·é€€å‡ºç™»å½•æ—¶ä¸äº«å—ä¼šå‘˜ä»·æ ¼
- * å¦‚æœå•†å“æœ‰ä¿ƒé”€ï¼Œä»·æ ¼ä¸å˜
+ * ÖØĞÂ¼ÆËã¹ºÎï³µÖĞµÄÉÌÆ·¼Û¸ñ£ºÄ¿µÄÊÇµ±ÓÃ»§µÇÂ¼Ê±ÏíÊÜ»áÔ±¼Û¸ñ£¬µ±ÓÃ»§ÍË³öµÇÂ¼Ê±²»ÏíÊÜ»áÔ±¼Û¸ñ
+ * Èç¹ûÉÌÆ·ÓĞ´ÙÏú£¬¼Û¸ñ²»±ä
  *
  * @access  public
  * @return  void
  */
 function recalculate_price()
 {
-    /* å–å¾—æœ‰å¯èƒ½æ”¹å˜ä»·æ ¼çš„å•†å“ï¼šé™¤é…ä»¶å’Œèµ å“ä¹‹å¤–çš„å•†å“ */
+    /* È¡µÃÓĞ¿ÉÄÜ¸Ä±ä¼Û¸ñµÄÉÌÆ·£º³ıÅä¼şºÍÔùÆ·Ö®ÍâµÄÉÌÆ· */
     $sql = 'SELECT c.rec_id, c.goods_id, c.goods_attr_id, g.promote_price, g.promote_start_date, c.goods_number,'.
                 "g.promote_end_date, IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS member_price ".
             'FROM ' . $GLOBALS['ecs']->table('cart') . ' AS c '.
@@ -1564,13 +1549,13 @@ function recalculate_price()
         $GLOBALS['db']->query($goods_sql);
     }
 
-    /* åˆ é™¤èµ å“ï¼Œé‡æ–°é€‰æ‹© */
+    /* É¾³ıÔùÆ·£¬ÖØĞÂÑ¡Ôñ */
     $GLOBALS['db']->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') .
         " WHERE session_id = '" . SESS_ID . "' AND is_gift > 0");
 }
 
 /**
- * æŸ¥è¯¢è¯„è®ºå†…å®¹
+ * ²éÑ¯ÆÀÂÛÄÚÈİ
  *
  * @access  public
  * @params  integer     $id
@@ -1580,7 +1565,7 @@ function recalculate_price()
  */
 function assign_comment($id, $type, $page = 1)
 {
-    /* å–å¾—è¯„è®ºåˆ—è¡¨ */
+    /* È¡µÃÆÀÂÛÁĞ±í */
     $count = $GLOBALS['db']->getOne('SELECT COUNT(*) FROM ' .$GLOBALS['ecs']->table('comment').
            " WHERE id_value = '$id' AND comment_type = '$type' AND status = 1 AND parent_id = 0");
     $size  = !empty($GLOBALS['_CFG']['comments_number']) ? $GLOBALS['_CFG']['comments_number'] : 5;
@@ -1605,7 +1590,7 @@ function assign_comment($id, $type, $page = 1)
         $arr[$row['comment_id']]['rank']     = $row['comment_rank'];
         $arr[$row['comment_id']]['add_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['add_time']);
     }
-    /* å–å¾—å·²æœ‰å›å¤çš„è¯„è®º */
+    /* È¡µÃÒÑÓĞ»Ø¸´µÄÆÀÂÛ */
     if ($ids)
     {
         $sql = 'SELECT * FROM ' . $GLOBALS['ecs']->table('comment') .
@@ -1619,7 +1604,7 @@ function assign_comment($id, $type, $page = 1)
             $arr[$row['parent_id']]['re_username'] = $row['user_name'];
         }
     }
-    /* åˆ†é¡µæ ·å¼ */
+    /* ·ÖÒ³ÑùÊ½ */
     //$pager['styleid'] = isset($GLOBALS['_CFG']['page_style'])? intval($GLOBALS['_CFG']['page_style']) : 0;
     $pager['page']         = $page;
     $pager['size']         = $size;
@@ -1659,7 +1644,7 @@ function assign_template($ctype = '', $catlist = array())
     $smarty->assign('username',      !empty($_SESSION['user_name']) ? $_SESSION['user_name'] : '');
     $smarty->assign('category_list', cat_list(0, 0, true,  2, false));
     $smarty->assign('catalog_list',  cat_list(0, 0, false, 1, false));
-    $smarty->assign('navigator_list',        get_navigator($ctype, $catlist));  //è‡ªå®šä¹‰å¯¼èˆªæ 
+    $smarty->assign('navigator_list',        get_navigator($ctype, $catlist));  //×Ô¶¨Òåµ¼º½À¸
 
     if (!empty($GLOBALS['_CFG']['search_keywords']))
     {
@@ -1673,7 +1658,7 @@ function assign_template($ctype = '', $catlist = array())
 }
 
 /**
- * å°†ä¸€ä¸ªæœ¬åœ°æ—¶é—´æˆ³è½¬æˆGMTæ—¶é—´æˆ³
+ * ½«Ò»¸ö±¾µØÊ±¼ä´Á×ª³ÉGMTÊ±¼ä´Á
  *
  * @access  public
  * @param   int     $time
@@ -1686,7 +1671,7 @@ function time2gmt($time)
 }
 
 /**
- * æŸ¥è¯¢ä¼šå‘˜çš„çº¢åŒ…é‡‘é¢
+ * ²éÑ¯»áÔ±µÄºì°ü½ğ¶î
  *
  * @access  public
  * @param   integer     $user_id
@@ -1709,7 +1694,7 @@ function get_user_bonus($user_id = 0)
 }
 
 /**
- * ä¿å­˜æ¨èuid
+ * ±£´æÍÆ¼öuid
  *
  * @access  public
  * @param   void
@@ -1744,13 +1729,13 @@ function set_affiliate()
         }
         else
         {
-            setcookie('ecshop_affiliate_uid', intval($_GET['u']), gmtime() + 3600 * 24); // è¿‡æœŸæ—¶é—´ä¸º 1 å¤©
+            setcookie('ecshop_affiliate_uid', intval($_GET['u']), gmtime() + 3600 * 24); // ¹ıÆÚÊ±¼äÎª 1 Ìì
         }
     }
 }
 
 /**
- * è·å–æ¨èuid
+ * »ñÈ¡ÍÆ¼öuid
  *
  * @access  public
  * @param   void
@@ -1777,10 +1762,10 @@ function get_affiliate()
 }
 
 /**
- * è·å¾—æŒ‡å®šåˆ†ç±»åŒçº§çš„æ‰€æœ‰åˆ†ç±»ä»¥åŠè¯¥åˆ†ç±»ä¸‹çš„å­åˆ†ç±»
+ * »ñµÃÖ¸¶¨·ÖÀàÍ¬¼¶µÄËùÓĞ·ÖÀàÒÔ¼°¸Ã·ÖÀàÏÂµÄ×Ó·ÖÀà
  *
  * @access  public
- * @param   integer     $cat_id     åˆ†ç±»ç¼–å·
+ * @param   integer     $cat_id     ·ÖÀà±àºÅ
  * @return  array
  */
 function article_categories_tree($cat_id = 0)
@@ -1796,14 +1781,14 @@ function article_categories_tree($cat_id = 0)
     }
 
     /*
-     åˆ¤æ–­å½“å‰åˆ†ç±»ä¸­å…¨æ˜¯æ˜¯å¦æ˜¯åº•çº§åˆ†ç±»ï¼Œ
-     å¦‚æœæ˜¯å–å‡ºåº•çº§åˆ†ç±»ä¸Šçº§åˆ†ç±»ï¼Œ
-     å¦‚æœä¸æ˜¯å–å½“å‰åˆ†ç±»åŠå…¶ä¸‹çš„å­åˆ†ç±»
+     ÅĞ¶Ïµ±Ç°·ÖÀàÖĞÈ«ÊÇÊÇ·ñÊÇµ×¼¶·ÖÀà£¬
+     Èç¹ûÊÇÈ¡³öµ×¼¶·ÖÀàÉÏ¼¶·ÖÀà£¬
+     Èç¹û²»ÊÇÈ¡µ±Ç°·ÖÀà¼°ÆäÏÂµÄ×Ó·ÖÀà
     */
     $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('article_cat') . " WHERE parent_id = '$parent_id'";
     if ($GLOBALS['db']->getOne($sql))
     {
-        /* è·å–å½“å‰åˆ†ç±»åŠå…¶å­åˆ†ç±» */
+        /* »ñÈ¡µ±Ç°·ÖÀà¼°Æä×Ó·ÖÀà */
         $sql = 'SELECT a.cat_id, a.cat_name, a.sort_order AS parent_order, a.cat_id, ' .
                     'b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order AS child_order ' .
                 'FROM ' . $GLOBALS['ecs']->table('article_cat') . ' AS a ' .
@@ -1812,7 +1797,7 @@ function article_categories_tree($cat_id = 0)
     }
     else
     {
-        /* è·å–å½“å‰åˆ†ç±»åŠå…¶çˆ¶åˆ†ç±» */
+        /* »ñÈ¡µ±Ç°·ÖÀà¼°Æä¸¸·ÖÀà */
         $sql = 'SELECT a.cat_id, a.cat_name, b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order ' .
                 'FROM ' . $GLOBALS['ecs']->table('article_cat') . ' AS a ' .
                 'LEFT JOIN ' . $GLOBALS['ecs']->table('article_cat') . ' AS b ON b.parent_id = a.cat_id ' .
@@ -1839,10 +1824,10 @@ function article_categories_tree($cat_id = 0)
 }
 
 /**
- * è·å¾—æŒ‡å®šæ–‡ç« åˆ†ç±»çš„æ‰€æœ‰ä¸Šçº§åˆ†ç±»
+ * »ñµÃÖ¸¶¨ÎÄÕÂ·ÖÀàµÄËùÓĞÉÏ¼¶·ÖÀà
  *
  * @access  public
- * @param   integer $cat    åˆ†ç±»ç¼–å·
+ * @param   integer $cat    ·ÖÀà±àºÅ
  * @return  array
  */
 function get_article_parent_cats($cat)
@@ -1888,11 +1873,11 @@ function get_article_parent_cats($cat)
 }
 
 /**
- * å–å¾—æŸæ¨¡æ¿æŸåº“è®¾ç½®çš„æ•°é‡
- * @param   string      $template   æ¨¡æ¿åï¼Œå¦‚index
- * @param   string      $library    åº“åï¼Œå¦‚recommend_best
- * @param   int         $def_num    é»˜è®¤æ•°é‡ï¼šå¦‚æœæ²¡æœ‰è®¾ç½®æ¨¡æ¿ï¼Œæ˜¾ç¤ºçš„æ•°é‡
- * @return  int         æ•°é‡
+ * È¡µÃÄ³Ä£°åÄ³¿âÉèÖÃµÄÊıÁ¿
+ * @param   string      $template   Ä£°åÃû£¬Èçindex
+ * @param   string      $library    ¿âÃû£¬Èçrecommend_best
+ * @param   int         $def_num    Ä¬ÈÏÊıÁ¿£ºÈç¹ûÃ»ÓĞÉèÖÃÄ£°å£¬ÏÔÊ¾µÄÊıÁ¿
+ * @return  int         ÊıÁ¿
  */
 function get_library_number($library, $template = null)
 {
@@ -1907,7 +1892,7 @@ function get_library_number($library, $template = null)
 
     static $lib_list = array();
 
-    /* å¦‚æœæ²¡æœ‰è¯¥æ¨¡æ¿çš„ä¿¡æ¯ï¼Œå–å¾—è¯¥æ¨¡æ¿çš„ä¿¡æ¯ */
+    /* Èç¹ûÃ»ÓĞ¸ÃÄ£°åµÄĞÅÏ¢£¬È¡µÃ¸ÃÄ£°åµÄĞÅÏ¢ */
     if (!isset($lib_list[$template]))
     {
         $lib_list[$template] = array();
@@ -1929,7 +1914,7 @@ function get_library_number($library, $template = null)
     }
     else
     {
-        /* æ¨¡æ¿è®¾ç½®æ–‡ä»¶æŸ¥æ‰¾é»˜è®¤å€¼ */
+        /* Ä£°åÉèÖÃÎÄ¼ş²éÕÒÄ¬ÈÏÖµ */
         include_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_template.php');
         static $static_page_libs = null;
         if ($static_page_libs == null)
@@ -1945,9 +1930,9 @@ function get_library_number($library, $template = null)
 }
 
 /**
- * å–å¾—è‡ªå®šä¹‰å¯¼èˆªæ åˆ—è¡¨
- * @param   string      $type    ä½ç½®ï¼Œå¦‚topã€bottomã€middle
- * @return  array         åˆ—è¡¨
+ * È¡µÃ×Ô¶¨Òåµ¼º½À¸ÁĞ±í
+ * @param   string      $type    Î»ÖÃ£¬Èçtop¡¢bottom¡¢middle
+ * @return  array         ÁĞ±í
  */
 function get_navigator($ctype = '', $catlist = array())
 {
@@ -1988,7 +1973,7 @@ function get_navigator($ctype = '', $catlist = array())
             );
     }
 
-    /*éå†è‡ªå®šä¹‰æ˜¯å¦å­˜åœ¨currentPage*/
+    /*±éÀú×Ô¶¨ÒåÊÇ·ñ´æÔÚcurrentPage*/
     foreach($navlist['middle'] as $k=>$v)
     {
         $condition = empty($ctype) ? (strpos($cur_url, $v['url']) === 0) : (strpos($cur_url, $v['url']) === 0 && strlen($cur_url) == strlen($v['url']));
@@ -1998,8 +1983,16 @@ function get_navigator($ctype = '', $catlist = array())
             $noindex = true;
             $active += 1;
         }
+		if(substr($v['url'],0,8)=='category')
+		{
+			$cat_id = $v['cid'];
+			$children = get_children($cat_id);
+			$cat_list = get_categories_tree_xaphp($cat_id);
+			$navlist['middle'][$k]['cat'] =1;
+			$navlist['middle'][$k]['cat_list'] =$cat_list;
+		}		
     }
-
+	
     if(!empty($ctype) && $active < 1)
     {
         foreach($catlist as $key => $val)
@@ -2023,8 +2016,54 @@ function get_navigator($ctype = '', $catlist = array())
     return $navlist;
 }
 
+function get_categories_tree_xaphp($cat_id = 0)
+{
+    if ($cat_id > 0)
+    {
+        $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
+        $parent_id = $GLOBALS['db']->getOne($sql);
+    }
+    else
+    {
+        $parent_id = 0;
+    }
+    /*
+     ÅĞ¶Ïµ±Ç°·ÖÀàÖĞÈ«ÊÇÊÇ·ñÊÇµ×¼¶·ÖÀà£¬
+     Èç¹ûÊÇÈ¡³öµ×¼¶·ÖÀàÉÏ¼¶·ÖÀà£¬
+     Èç¹û²»ÊÇÈ¡µ±Ç°·ÖÀà¼°ÆäÏÂµÄ×Ó·ÖÀà
+    */
+    $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$cat_id' AND is_show = 1 ";
+   
+        /* »ñÈ¡µ±Ç°·ÖÀà¼°Æä×Ó·ÖÀà */
+        $sql = 'SELECT cat_id,cat_name ,parent_id,is_show ' .
+                'FROM ' . $GLOBALS['ecs']->table('category') .
+                "WHERE parent_id = '$cat_id' AND is_show = 1 ORDER BY sort_order ASC, cat_id ASC";
+        $res = $GLOBALS['db']->getAll($sql);
+        foreach ($res AS $row)
+        {
+            if ($row['is_show'])
+            {
+                $cat_arr[$row['cat_id']]['id']   = $row['cat_id'];
+                $cat_arr[$row['cat_id']]['name'] = $row['cat_name'];
+                $cat_arr[$row['cat_id']]['url']  = build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']);
+				
+                if (isset($row['cat_id']) != NULL)
+                {
+                    $cat_arr[$row['cat_id']]['cat_id'] = get_child_tree($row['cat_id']);
+                }
+				
+           }
+        }
+		
+    
+    if(isset($cat_arr))
+    {
+        return $cat_arr;
+    }
+}
+
 /**
- * æˆæƒä¿¡æ¯å†…å®¹
+ * ÊÚÈ¨ĞÅÏ¢ÄÚÈİ
  *
  * @return  str
  */
@@ -2032,7 +2071,7 @@ function license_info()
 {
     if($GLOBALS['_CFG']['licensed'] > 0)
     {
-        /* è·å–HOST */
+        /* »ñÈ¡HOST */
         if (isset($_SERVER['HTTP_X_FORWARDED_HOST']))
         {
             $host = $_SERVER['HTTP_X_FORWARDED_HOST'];

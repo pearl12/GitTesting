@@ -198,13 +198,11 @@ class alipay
         {
             return false;
         }
-
         /* 检查支付的金额是否相符 */
         if (!check_money($order_sn, $_GET['total_fee']))
         {
             return false;
         }
-
         if ($_GET['trade_status'] == 'WAIT_SELLER_SEND_GOODS')
         {
             /* 改变订单状态 */
